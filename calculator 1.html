@@ -10,15 +10,15 @@
         height: 100vh;
 
         /* 🔥 Gradient Background */
-        background: linear-gradient(135deg, #76316f, #764ba2);
+        background: linear-gradient(135deg, #667eea, #764ba2);
         font-family: Arial, sans-serif;
     }
     .title {
         position: absolute;
-        top: 50px;
+        top: 20px;
         text-align: center;
         width: 100%;
-        color:rgb(231, 231, 231);
+        color:hotpink;
         font-size: 32px;
         font-weight: bold;
     }
@@ -40,6 +40,50 @@
         border-radius: 10px;
         background: #2c2c3e;
         color: white;
+    }
+
+    /* Toggle Button */
+    .toggle-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 8px 12px;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    /* Light Mode Background */
+    body.light {
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    }
+
+    /* Light Mode Title */
+    body.light .title {
+        color: #6a1b9a;
+    }
+
+/* Light Mode Calculator */
+    body.light .calculator {
+        background: #ffffff;
+    }
+
+/* Light Mode Input */
+    body.light input {
+        background: #eeeeee;
+        color: black;
+    }
+
+    /* Light Mode Buttons */
+    body.light button {
+        background: #e0e0e0;
+        color: black;
+    }
+
+/* Hover in Light Mode */
+    body.light button:hover {
+        background: #bdbdbd;
     }
 
     button {
@@ -67,11 +111,11 @@
 
     /* 🎯 Operator buttons */
     button:nth-child(4n) {
-        background: #602bd4;
+        background: #ff9f43;
     }
 
     button:nth-child(4n):hover {
-        background: #602bd4;
+        background: #ff7f00;
     }
 
     /* 🎯 Equal button */
@@ -95,34 +139,50 @@
 </style>
 </head>
 <body>
+    <button class="toggle-btn" onclick="toggleMode()">🌙</button>
     <h1 class="title">Calculator Pro!!!</h1>
-
+<br>
+<br>
 <div class="calculator">
     <input type="text" id="display" disabled>
+
+    <br>
+    <button onclick="sqrt()">√</button>
+    <button onclick="power()">x²</button>
+    <button onclick="cube()">x³</button>
+    <button onclick="floorDivide()">//</button>
+    <button onclick="backspace()">⌫</button>
+
 
     <br>
     <button onclick="press('7')">7</button>
     <button onclick="press('8')">8</button>
     <button onclick="press('9')">9</button>
-    <button onclick="press('/')">/</button>
+    <button onclick="press('+')">+</button>
+    <button onclick="press('%')">%</button>
+    
 
     <br>
     <button onclick="press('4')">4</button>
     <button onclick="press('5')">5</button>
     <button onclick="press('6')">6</button>
-    <button onclick="press('*')">*</button>
+    <button onclick="press('-')">-</button>
+    <button onclick="reciprocal()">1/x</button>
 
     <br>
     <button onclick="press('1')">1</button>
     <button onclick="press('2')">2</button>
     <button onclick="press('3')">3</button>
-    <button onclick="press('-')">-</button>
+    <button onclick="press('*')">*</button>
+    <button onclick="press('/')">/</button>
 
     <br>
+    <button onclick="press('🥰')">🥰</button>
     <button onclick="press('0')">0</button>
     <button onclick="press('.')">.</button>
     <button onclick="calculate()">=</button>
-    <button onclick="press('+')">+</button>
+    <button onclick="press('🥰')">🥰</button>
+
 
     <br>
     <button onclick="clearDisplay()">C</button>
@@ -133,18 +193,103 @@
         document.getElementById("display").value += value;
     }
 
+    
     function calculate() {
-        try {
-            document.getElementById("display").value =
-                eval(document.getElementById("display").value);
-        } catch {
-            alert("Invalid Expression");
-        }
+    try {
+        let exp = document.getElementById("display").value;
+
+        // Handle % manually
+        exp = exp.replace('%', '/100');
+
+        document.getElementById("display").value = eval(exp);
+    } catch {
+        alert("Invalid Expression");
+    }
     }
 
     function clearDisplay() {
         document.getElementById("display").value = "";
     }
+
+    function toggleMode() {
+         document.body.classList.toggle("light");
+         const btn = document.querySelector(".toggle-btn");
+         btn.textContent =
+         document.body.classList.contains("light") ? "🌞" : "🌙";
+    }
+    function sqrt() {
+    let value = document.getElementById("display").value;
+    if (value !== "") {
+        document.getElementById("display").value = Math.sqrt(value);
+    }
+    }
+
+    function power() {
+    let value = document.getElementById("display").value;
+    if (value !== "") {
+        document.getElementById("display").value = Math.pow(value, 2);
+    }
+    }
+
+    function floorDivide() {
+        let exp = document.getElementById("display").value;
+        try {
+            let parts = exp.split("//");
+            if (parts.length === 2) {
+                let result = Math.floor(parts[0] / parts[1]);
+                document.getElementById("display").value = result;
+            }
+        } catch {
+            alert("Invalid Expression");
+        }
+    }
+
+    function backspace() {
+        let current = document.getElementById("display").value;
+        document.getElementById("display").value = current.slice(0, -1);
+    }
+    function reciprocal() {
+        let value = document.getElementById("display").value;
+
+        try {
+            if (value === "") {
+                alert("Enter a number");
+                return;
+            }
+
+        // Evaluate expression first (like 2+3)
+            let result = eval(value);
+
+            if (result == 0) {
+                alert("Cannot divide by zero");
+                return;
+            }
+
+            document.getElementById("display").value = 1 / result;
+
+        } catch {
+            alert("Invalid Expression");
+        }
+    }
+    function cube() {
+        let value = document.getElementById("display").value;
+
+        try {
+            if (value === "") {
+                alert("Enter a number");
+                return;
+            }
+
+        // Evaluate expression first (like 2+3)
+            let result = eval(value);
+
+            document.getElementById("display").value = Math.pow(result, 3);
+
+        } catch {
+            alert("Invalid Expression");
+        }
+    }
+
 </script>
 
 </body>
